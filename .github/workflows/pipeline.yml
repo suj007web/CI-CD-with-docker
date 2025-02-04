@@ -9,7 +9,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     env:
-      GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}  # Map the secret to an environment variable
+      GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}  
 
     steps:
       - name: Checkout Repository
@@ -18,11 +18,19 @@ jobs:
       - name: Login to GitHub Container Registry
         run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      # Build and push images using docker-compose
-      - name: Build and Push Docker Images
+      # Build and push Backend Image
+      - name: Build and Push Backend Image
+        working-directory: ./server
         run: |
-          docker-compose build
-          docker-compose push
+          docker build -t ghcr.io/${{ github.actor }}/backend:latest .
+          docker push ghcr.io/${{ github.actor }}/backend:latest
+
+      # Build and push Frontend Image
+      - name: Build and Push Frontend Image
+        working-directory: ./client
+        run: |
+          docker build -t ghcr.io/${{ github.actor }}/frontend:latest .
+          docker push ghcr.io/${{ github.actor }}/frontend:latest
 
       # Deploy to EC2
       - name: Deploy to EC2
@@ -39,6 +47,6 @@ jobs:
             # Pull latest images
             docker-compose pull
 
-            # Restart containers with latest images
+            # Restart containers
             docker-compose down
             docker-compose up -d

@@ -5,14 +5,17 @@ services:
     build: ./backend
     ports:
       - "8000:8000"
-    environment:
-      - NODE_ENV=production
+    env_file:
+      - ./backend/.env
+
     restart: always
 
   frontend:
     build: ./frontend
     ports:
-      - "5173:80"  
+      - "5173:80"
+    env_file:
+      - ./frontend/.env  
     depends_on:
       - backend
     restart: always

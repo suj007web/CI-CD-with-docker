@@ -28,7 +28,7 @@ const App = () => {
   }
   const fetchTodos = async () => {
     try{
-      const response = await fetch('http://localhost:8000/api/todo')
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/todo`)
       const {data} = await response.json()
       setTodos(data)
      
@@ -44,7 +44,7 @@ const App = () => {
     e.preventDefault()
 
     try{
-      const response = await fetch('http://localhost:8000/api/todo', {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/todo`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -62,7 +62,7 @@ const App = () => {
 
   const handleDelete = async (id: number) => {
     try{
-      const response = await fetch(`http://localhost:8000/api/todo/${id}`, {
+      const response = await fetch(`http://${import.meta.env.VITE_BACKEND_URL}/api/todo/${id}`, {
         method: 'DELETE'
       })
       fetchTodos()
@@ -112,7 +112,7 @@ const App = () => {
                       }else{
                         setCompleted(completed - 1)
                       }
-                      const response = await fetch(`http://localhost:8000/api/todo/${todo.id}`, {
+                      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/todo/${todo.id}`, {
                         method: 'PATCH',
                         headers: {
                           'Content-Type': 'application/json'
