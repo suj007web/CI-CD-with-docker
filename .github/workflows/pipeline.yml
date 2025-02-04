@@ -22,14 +22,14 @@ jobs:
       - name: Build and Push Backend Image
         working-directory: ./backend
         run: |
-          docker build -t ghcr.io/${{ github.actor }}/backend:latest .
+          docker build --no-cache -t ghcr.io/${{ github.actor }}/backend:latest .
           docker push ghcr.io/${{ github.actor }}/backend:latest
 
       # Build and push Frontend Image
       - name: Build and Push Frontend Image
         working-directory: ./frontend
         run: |
-          docker build -t ghcr.io/${{ github.actor }}/frontend:latest .
+          docker build --no-cache  -t ghcr.io/${{ github.actor }}/frontend:latest .
           docker push ghcr.io/${{ github.actor }}/frontend:latest
 
       # Copy docker-compose.yml to EC2
