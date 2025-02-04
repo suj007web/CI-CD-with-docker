@@ -75,16 +75,16 @@ const App = () => {
 
   return (
     <div className='bg-slate-900 min-h-screen flex flex-col items-center justify-center'>
-      <div className='bg-slate-800  h-1/3 w-[80%] max-w-[80%] rounded-md flex justify-center flex-col items-center' >
-        <h1 className='text-orange-500 text-3xl font-semibold '>Todo List</h1>
-        <form action="" className='flex flex-col items-center' onSubmit={handleSubmit}>
-        <input type="text" value={todo.title} name='title' className='bg-white mt-2 px-4 py-1 rounded-md outline-none' placeholder='Title' onChange={(e)=>{
+      <div className='bg-slate-800  h-1/3 w-[80%] max-w-[80%] rounded-md flex justify-center flex-col items-center h-40' >
+        <h1 className='text-orange-500 text-3xl font-semibold'>Todo List</h1>
+        <form action="" className='flex gap-5 justify-center items-center w-full px-10' onSubmit={handleSubmit}>
+        <input type="text" value={todo.title} name='title' className='bg-white mt-2 px-4 py-1 h-10 rounded-md outline-none w-[30%]' placeholder='Title' onChange={(e)=>{
           setTodo({
             ...todo,
             title: e.target.value
           })
         }}/>
-        <textarea name="description" value={todo.description} className='bg-white mt-4 px-4 px-1 outline-none h-20 rounded-md' placeholder='Description' id=""
+        <textarea name="description" value={todo.description} className='bg-white w-[70%] mt-2 px-4 py-1 outline-none h-10 rounded-md' placeholder='Description' id=""
         onChange={(e)=>{
           setTodo({
             ...todo,
