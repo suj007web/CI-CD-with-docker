@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -14,27 +13,27 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Login to GitHub Container Registry
-        run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
+        run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       # Build and push Backend
       - name: Build Backend Image
         working-directory: ./backend
         run: |
-          docker build -t ghcr.io/${{ secrets.GHCR_USERNAME }}/backend:latest .
+          docker build -t ghcr.io/${{ github.actor }}/backend:latest .
 
       - name: Push Backend Image
         run: |
-          docker push ghcr.io/${{ secrets.GHCR_USERNAME }}/backend:latest
+          docker push ghcr.io/${{ github.actor }}/backend:latest
 
       # Build and push Frontend
       - name: Build Frontend Image
         working-directory: ./frontend
         run: |
-          docker build -t ghcr.io/${{ secrets.GHCR_USERNAME }}/frontend:latest .
+          docker build -t ghcr.io/${{ github.actor }}/frontend:latest .
 
       - name: Push Frontend Image
         run: |
-          docker push ghcr.io/${{ secrets.GHCR_USERNAME }}/frontend:latest
+          docker push ghcr.io/${{ github.actor }}/frontend:latest
 
       # Deployment to EC2
       - name: Deploy to EC2
@@ -45,13 +44,13 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             # Update and run Backend
-            docker pull ghcr.io/${{ secrets.GHCR_USERNAME }}/backend:latest
+            docker pull ghcr.io/${{ github.actor }}/backend:latest
             docker stop backend || true
             docker rm backend || true
-            docker run -d -p 8000:8000 --name backend ghcr.io/${{ secrets.GHCR_USERNAME }}/backend:latest
-            
+            docker run -d -p 8000:8000 --name backend ghcr.io/${{ github.actor }}/backend:latest
+
             # Update and run Frontend
-            docker pull ghcr.io/${{ secrets.GHCR_USERNAME }}/frontend:latest
+            docker pull ghcr.io/${{ github.actor }}/frontend:latest
             docker stop frontend || true
             docker rm frontend || true
-            docker run -d -p 5173:5173 --name frontend ghcr.io/${{ secrets.GHCR_USERNAME }}/frontend:latest
+            docker run -d -p 5173:5173 --name frontend ghcr.io/${{ github.actor }}/frontend:latest
