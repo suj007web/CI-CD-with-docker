@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -17,46 +18,27 @@ jobs:
       - name: Login to GitHub Container Registry
         run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      # Build and push Backend
-      - name: Build Backend Image
-        working-directory: ./backend
+      # Build and push images using docker-compose
+      - name: Build and Push Docker Images
         run: |
-          docker build -t ghcr.io/${{ github.actor }}/backend:latest .
+          docker-compose build
+          docker-compose push
 
-      - name: Push Backend Image
-        run: |
-          docker push ghcr.io/${{ github.actor }}/backend:latest
-
-      # Build and push Frontend
-      - name: Build Frontend Image
-        working-directory: ./frontend
-        run: |
-          docker build -t ghcr.io/${{ github.actor }}/frontend:latest .
-
-      - name: Push Frontend Image
-        run: |
-          docker push ghcr.io/${{ github.actor }}/frontend:latest
-
-      # Deployment to EC2
+      # Deploy to EC2
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
-          envs: GHCR_TOKEN  # Pass the environment variable to the EC2 instance
+          envs: GHCR_TOKEN
           script: |
             # Authenticate with GHCR
             echo "$GHCR_TOKEN" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-            # Update and run Backend
-            docker pull ghcr.io/${{ github.actor }}/backend:latest
-            docker stop backend || true
-            docker rm backend || true
-            docker run -d -p 8000:8000 --name backend ghcr.io/${{ github.actor }}/backend:latest
+            # Pull latest images
+            docker-compose pull
 
-            # Update and run Frontend
-            docker pull ghcr.io/${{ github.actor }}/frontend:latest
-            docker stop frontend || true
-            docker rm frontend || true
-            docker run -d -p 5173:80 --name frontend ghcr.io/${{ github.actor }}/frontend:latest
+            # Restart containers with latest images
+            docker-compose down
+            docker-compose up -d
