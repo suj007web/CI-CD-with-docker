@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cors<Request>());
 
-console.log(process.env.DATABASE_URL);
+console.log(process.env.DATABASE_URL, "Jindagi sawar du ek nai bahaar du");
 app.use("/api/todo", router);
 
 app.listen(PORT, ()=>{
