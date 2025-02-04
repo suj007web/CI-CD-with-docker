@@ -62,7 +62,7 @@ const App = () => {
 
   const handleDelete = async (id: number) => {
     try{
-      const response = await fetch(`http://${import.meta.env.VITE_BACKEND_URL}/api/todo/${id}`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/todo/${id}`, {
         method: 'DELETE'
       })
       fetchTodos()
