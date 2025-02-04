@@ -59,4 +59,4 @@ jobs:
             docker pull ghcr.io/${{ github.actor }}/frontend:latest
             docker stop frontend || true
             docker rm frontend || true
-            docker run -d -p 5173:5173 --name frontend ghcr.io/${{ github.actor }}/frontend:latest
+            docker run -d -p 5173:80 --name frontend ghcr.io/${{ github.actor }}/frontend:latest
