@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      BACKEND_URL: ${{ secrets.BACKEND_URL }}
 
     steps:
       - name: Checkout Repository
@@ -53,7 +55,7 @@ jobs:
           script: |
             echo "DATABASE_URL: $DATABASE_URL"
             echo "BACKEND_URL: $BACKEND_URL"
-            echo "GHCR_TOKEN: $GHCR_TOKEN"
+ 
             # Navigate to the directory with docker-compose.yml
             cd /home/ubuntu/my-app
 
