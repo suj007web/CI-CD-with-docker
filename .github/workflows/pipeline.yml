@@ -7,6 +7,8 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}  # Map the secret to an environment variable
 
     steps:
       - name: Checkout Repository
@@ -42,7 +44,11 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
+          envs: GHCR_TOKEN  # Pass the environment variable to the EC2 instance
           script: |
+            # Authenticate with GHCR
+            echo "$GHCR_TOKEN" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
             # Update and run Backend
             docker pull ghcr.io/${{ github.actor }}/backend:latest
             docker stop backend || true
