@@ -1,10 +1,11 @@
-import express, {Express} from 'express';
 import dotenv from "dotenv"
+dotenv.config();
+console.log(process.env.DATABASE_URL, "Jindagi sawar du ek nai bahaar du");
+import express, {Express} from 'express';
 import cors from "cors";
 import router from './routes/todo.routes';
 import { Request } from 'express';
 
-dotenv.config();
 
 
 const app : Express = express();
@@ -14,7 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cors<Request>());
 
-console.log(process.env.DATABASE_URL, "Jindagi sawar du ek nai bahaar du");
+
 app.use("/api/todo", router);
 
 app.listen(PORT, ()=>{
