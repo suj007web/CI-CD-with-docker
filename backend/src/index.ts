@@ -13,6 +13,8 @@ const PORT = process.env.PORT || 5500;
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cors<Request>());
+
+console.log(process.env.DATABASE_URL);
 app.use("/api/todo", router);
 
 app.listen(PORT, ()=>{
