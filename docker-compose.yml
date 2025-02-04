@@ -6,7 +6,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=${DB_URL}
+      - DATABASE_URL=${DATABASE_URL}
       - PORT=8000
     restart: always
 
