@@ -32,8 +32,8 @@ jobs:
         working-directory: ./frontend
         run: |
           docker build \
-          --build-arg VITE_BACKEND_URL=${{ secrets.BACKEND_URL }} 
-          -t ghcr.io/${{ github.actor }}/frontend:latest .
+            --build-arg VITE_BACKEND_URL=${{ secrets.BACKEND_URL }} \
+            -t ghcr.io/${{ github.actor }}/frontend:latest .
           docker push ghcr.io/${{ github.actor }}/frontend:latest
 
       # Copy docker-compose.yml to EC2
