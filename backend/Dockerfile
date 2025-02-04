@@ -6,5 +6,5 @@ RUN npm install
 COPY . .
 
 EXPOSE 8000
-CMD ["sh", "-c", "npm run build && npm start"]
+CMD ["sh", "-c", "npx ts-node src/index.ts"]
 
